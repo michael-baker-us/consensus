@@ -1,0 +1,60 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: dark;
+  --bg: #0b0b12;
+  --fg: #f4f4f8;
+  --muted: #9a9ab0;
+  --accent: #7c6cff;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: radial-gradient(120vmax 120vmax at 50% 120%, #16122e 0%, var(--bg) 60%);
+  color: var(--fg);
+  font-family: system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.home {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.home-brand {
+  margin: 0;
+  font-size: clamp(2.5rem, 10vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(120deg, var(--fg) 40%, var(--accent));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.home-tagline {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--muted);
+}
+
+.home-status {
+  margin-top: 2rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.home-link {
+  color: var(--accent);
+}
