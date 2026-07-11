@@ -13,7 +13,8 @@
     "test": "pnpm -r test",
     "lint": "eslint .",
     "typecheck": "pnpm -r typecheck",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "e2e": "pnpm --filter app e2e"
   },
   "devDependencies": {
     "eslint": "^10.6.0",
