@@ -161,18 +161,26 @@ type SessionSnapshot = {
 ## Services and interfaces (`backend`)
 
 ```ts
+// FROZEN in M2 (packages/backend/src/session-service.ts is the authority).
 interface SessionService {
-  createRoom(config: RoomConfig): Promise<RoomHandle>; // deck built server-side
-  joinRoom(code: string, displayName: string): Promise<RoomHandle>;
-  snapshots(room: RoomHandle): AsyncIterable<SessionSnapshot>;
-  startVoting(): Promise<void>;
-  submitVotes(votes: Vote[]): Promise<void>;
-  forceReveal(): Promise<void>;
-  broadcastSpin(spin: WheelSpin): Promise<void>;
-  spins(): AsyncIterable<WheelSpin>;
-  leave(): Promise<void>;
+  createRoom(config: RoomConfig, hostDisplayName: string): Promise<RoomHandle>; // deck built server-side
+  joinRoom(roomCode: string, displayName: string): Promise<RoomHandle>;
+  snapshots(handle: RoomHandle): AsyncIterable<SessionSnapshot>; // emits current state immediately
+  startVoting(handle: RoomHandle): Promise<void>;
+  submitVotes(handle: RoomHandle, votes: Vote[]): Promise<void>; // idempotent upsert
+  forceReveal(handle: RoomHandle): Promise<void>; // never yields a runoff — winner or tie only
+  broadcastSpin(handle: RoomHandle, spin: WheelSpin): Promise<void>;
+  spins(handle: RoomHandle): AsyncIterable<WheelSpin>;
+  resolveTie(handle: RoomHandle, winningItemId: string): Promise<void>; // records the wheel's verdict, validated
+  leave(handle: RoomHandle): Promise<void>;
 }
 ```
+
+Freeze-time refinements over the original sketch: every session-scoped
+method takes an explicit, serializable `RoomHandle` (reload re-entry
+persists it; it maps 1:1 onto the SQL RPCs), `resolveTie` exists so the
+wheel's outcome has an authoritative home, and `forceReveal` scores as if
+runoffs are exhausted — the host asked for an end, not another round.
 
 `FakeSessionService` is a first-class citizen, not a test afterthought: it
 implements the same state machine via `core`, simulates scripted

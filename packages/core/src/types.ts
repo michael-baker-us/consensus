@@ -66,6 +66,9 @@ export type Room = {
   /** 0 for the initial vote; increments per runoff. */
   round: number;
   config: RoomConfig;
+  /** Set when the decision is final — by scoring (clear winner) or by the
+   * wheel (resolveTie). */
+  winnerItemId?: string;
 };
 
 /** Per-item tally for one round, exposed for the reveal leaderboard. */

@@ -1,5 +1,15 @@
-// @consensus/backend — the SessionService interface and its implementations
-// (Supabase + Fake). The interface is designed and frozen in M2 (docs/05);
-// only this package may import supabase-js (docs/04).
+// @consensus/backend — the SessionService seam and its implementations.
+// Only this package may import supabase-js (docs/04); the Supabase
+// implementation arrives in M7.
 
-export {};
+export {
+  SessionError,
+  type RoomHandle,
+  type SessionErrorCode,
+  type SessionService,
+} from "./session-service.ts";
+export {
+  FakeSessionService,
+  type FakeSessionOptions,
+  type ScriptedGuest,
+} from "./fake/fake-session-service.ts";
