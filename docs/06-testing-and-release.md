@@ -5,13 +5,13 @@ the easiest one. Everything below is free.
 
 ## What you need
 
-| Thing | Cost | Needed from |
-| --- | --- | --- |
-| Node 22+ / pnpm | free | M0 |
-| Docker Desktop + Supabase CLI | free | M6 — local database |
-| Supabase hosted project (free tier) | free | M5 (Edge Function) / M7 (phone multiplayer) |
-| TMDb API key | free | M5 |
-| GitHub Pages (or Cloudflare Pages/Vercel/Netlify) | free | M0 — live from day one |
+| Thing                                             | Cost | Needed from                                 |
+| ------------------------------------------------- | ---- | ------------------------------------------- |
+| Node 22+ / pnpm                                   | free | M0                                          |
+| Docker Desktop + Supabase CLI                     | free | M6 — local database                         |
+| Supabase hosted project (free tier)               | free | M5 (Edge Function) / M7 (phone multiplayer) |
+| TMDb API key                                      | free | M5                                          |
+| GitHub Pages (or Cloudflare Pages/Vercel/Netlify) | free | M0 — live from day one                      |
 
 There is no developer program, no signing, no provisioning, no 7-day expiry,
 no review process. The former iOS version of this doc needed $99 and an
@@ -65,7 +65,7 @@ SQL tests, hosted free project for anything with a phone. Free-tier limits
 
 Send the URL. That's the section.
 
-(Friends on iPhone *and* Android join the same room from the same link with
+(Friends on iPhone _and_ Android join the same room from the same link with
 nothing installed. The QR in the lobby encodes the join URL, so the native
 camera app scans straight in.)
 
@@ -94,12 +94,12 @@ camera app scans straight in.)
 The pivot's biggest win: **reviewers can use the product, not watch it.**
 
 - README top: the live URL and a `/room/DEMO` link ("play a round by
-  yourself right now, nothing to install") *above* the demo video.
+  yourself right now, nothing to install") _above_ the demo video.
 - 30-second video: two browser windows, host and guest, synchronized reveal
   and wheel — recorded with QuickTime in minutes.
 - The `docs/01–06` planning trail, CI badges, small-PR history, and a
-  five-step "run it locally" section complete the picture: evidence of *why*
-  and *how*, not just *what*.
+  five-step "run it locally" section complete the picture: evidence of _why_
+  and _how_, not just _what_.
 
 ## Appendix: if it ever needs to be a "real app"
 

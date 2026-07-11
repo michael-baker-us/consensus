@@ -20,12 +20,12 @@ heard of this app. He taps a link mid-conversation. If he isn't voting within
 60 seconds of tapping (install time excluded), we've lost him — and losing one
 guest kills the session for everyone.
 
-**Designs for him:** zero-signup join, name entry as the *only* gate, voting
+**Designs for him:** zero-signup join, name entry as the _only_ gate, voting
 UI that needs no explanation.
 
 ### 3. Sam & Priya — the Couple
 
-Deciding date-night movie. Group of two — likely the *most common* real-world
+Deciding date-night movie. Group of two — likely the _most common_ real-world
 session size. Keeps the design honest: consensus math, reveal drama, and the
 wheel must all work when n = 2, not just for parties.
 
@@ -34,15 +34,15 @@ that assumes a crowd.
 
 ## Primary user journey (target: under 5 minutes)
 
-| Time | Who | What happens |
-| --- | --- | --- |
-| 0:00 | Maya | New Room → Movies → picks streaming services, genres, deck size → room created with code, QR, share link |
-| 0:30 | Maya | Shares link to the group chat |
-| 0:45 | Jake | Taps link → browser opens straight into the room's join screen → types "Jake" → lands in lobby. No install, no account. |
-| 1:30 | Maya | Lobby shows 5 participants → Start |
-| 1:30–3:30 | All | Each swipes the ~15-card deck privately; waiting screen shows "3 of 5 finished" |
-| 3:30 | All | Everyone done (or Maya force-reveals) → reveal ceremony: leaderboard animates bottom-up, unanimous banner if earned, tie at the top → wheel spin |
-| 4:15 | All | Winner card: poster, where to watch, done. Group presses play on the TV. |
+| Time      | Who  | What happens                                                                                                                                     |
+| --------- | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 0:00      | Maya | New Room → Movies → picks streaming services, genres, deck size → room created with code, QR, share link                                         |
+| 0:30      | Maya | Shares link to the group chat                                                                                                                    |
+| 0:45      | Jake | Taps link → browser opens straight into the room's join screen → types "Jake" → lands in lobby. No install, no account.                          |
+| 1:30      | Maya | Lobby shows 5 participants → Start                                                                                                               |
+| 1:30–3:30 | All  | Each swipes the ~15-card deck privately; waiting screen shows "3 of 5 finished"                                                                  |
+| 3:30      | All  | Everyone done (or Maya force-reveals) → reveal ceremony: leaderboard animates bottom-up, unanimous banner if earned, tie at the top → wheel spin |
+| 4:15      | All  | Winner card: poster, where to watch, done. Group presses play on the TV.                                                                         |
 
 ## Session state machine
 
@@ -99,20 +99,20 @@ Consensus
 
 ## Screen inventory (12)
 
-| # | Screen | Key states |
-| --- | --- | --- |
-| 1 | Home | default · has recent sessions |
-| 2 | Category chooser | Movies only (visual placeholder for future categories) |
-| 3 | Filters | default · services empty-warning · loading provider list |
-| 4 | Review & Create | creating (network) · create failed |
-| 5 | Join | manual code · pre-filled from URL · room not found · room already started |
-| 6 | Name entry | first run only; remembered afterward |
-| 7 | Lobby | 1 participant · n participants · host vs guest view · room expired |
-| 8 | Voting | card stack · deck loading · image loading · last card |
-| 9 | Waiting | progress · someone left · host force-reveal control |
-| 10 | Reveal | leaderboard animation · unanimous banner · tie → wheel handoff |
-| 11 | Winner | poster + watch providers · rematch CTA |
-| 12 | Settings | static |
+| #   | Screen           | Key states                                                                |
+| --- | ---------------- | ------------------------------------------------------------------------- |
+| 1   | Home             | default · has recent sessions                                             |
+| 2   | Category chooser | Movies only (visual placeholder for future categories)                    |
+| 3   | Filters          | default · services empty-warning · loading provider list                  |
+| 4   | Review & Create  | creating (network) · create failed                                        |
+| 5   | Join             | manual code · pre-filled from URL · room not found · room already started |
+| 6   | Name entry       | first run only; remembered afterward                                      |
+| 7   | Lobby            | 1 participant · n participants · host vs guest view · room expired        |
+| 8   | Voting           | card stack · deck loading · image loading · last card                     |
+| 9   | Waiting          | progress · someone left · host force-reveal control                       |
+| 10  | Reveal           | leaderboard animation · unanimous banner · tie → wheel handoff            |
+| 11  | Winner           | poster + watch providers · rematch CTA                                    |
+| 12  | Settings         | static                                                                    |
 
 Per-screen layout, component, animation, and full empty/loading/error state
 specs are Phase 3.

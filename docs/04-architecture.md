@@ -15,14 +15,14 @@ the choice: `supabase-js` is the best-supported client SDK they ship.
 
 **The app never imports `supabase-js` outside one package.** Every backend
 interaction goes through the `SessionService` interface, so the vendor is
-swappable and, more importantly, *fakeable* for tests, Storybook-style
+swappable and, more importantly, _fakeable_ for tests, Storybook-style
 component work, and the demo mode.
 
 ## Where the rules live: in Postgres, not in browsers
 
-A browser client is *less* trustworthy than an app-store binary — anyone can
+A browser client is _less_ trustworthy than an app-store binary — anyone can
 open devtools — which makes server-side authority non-negotiable rather than
-merely elegant. Clients *request*, the database *decides*, and every client
+merely elegant. Clients _request_, the database _decides_, and every client
 (requester included) reacts to the state change arriving over realtime. One
 code path for "I did it" and "someone else did it."
 
@@ -37,7 +37,7 @@ Postgres functions (RPC), each transactional:
   transaction instead of haunting the client.
 - `force_reveal(room_id)` — host-only.
 - `leave_room(participant_id)` — re-runs the completion check (a leaver can
-  *cause* completion).
+  _cause_ completion).
 
 Row Level Security mirrors the rules: participants read only their room;
 votes are insert-only by their owner and **readable by no one** until the
@@ -49,7 +49,7 @@ implemented twice by design: in SQL (authoritative) and in `core`
 (TypeScript — for the fake backend, tests, optimistic UI), with a **shared
 JSON fixture suite asserted by both test runners** so they can never drift.
 Cross-language duplication is normally a smell; here it buys an
-authoritative server *and* a fully-testable client, and the fixtures keep
+authoritative server _and_ a fully-testable client, and the fixtures keep
 them honest.
 
 ## Realtime topology (per room)
@@ -126,34 +126,35 @@ nothing. Only `main.tsx` sees concrete implementations.
 
 ## Stack choices, with reasons
 
-| Choice | Why |
-| --- | --- |
-| **React 19 + TypeScript (strict) + Vite** | Most legible stack to portfolio reviewers; Vite for instant dev loop and static builds that deploy anywhere free |
-| **Motion (Framer Motion)** | `layoutId` shared-element transitions are the matched-geometry poster continuity from docs/03; best-in-class spring/gesture APIs |
-| **Zustand** | One small store holding the latest `SessionSnapshot` + optimistic local state; no server-cache library needed — realtime push *is* the cache |
-| **react-router v7** | Three routes; anything heavier is overhead |
-| **Tailwind CSS v4** | Fast iteration; design tokens as CSS custom properties (poster-derived backdrop colors are runtime values) |
-| **PWA (vite-plugin-pwa)** | Add-to-home-screen + icon + standalone display — the "feels like an app" layer, added late (M10), not a structural concern |
+| Choice                                    | Why                                                                                                                                          |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **React 19 + TypeScript (strict) + Vite** | Most legible stack to portfolio reviewers; Vite for instant dev loop and static builds that deploy anywhere free                             |
+| **Motion (Framer Motion)**                | `layoutId` shared-element transitions are the matched-geometry poster continuity from docs/03; best-in-class spring/gesture APIs             |
+| **Zustand**                               | One small store holding the latest `SessionSnapshot` + optimistic local state; no server-cache library needed — realtime push _is_ the cache |
+| **react-router v7**                       | Three routes; anything heavier is overhead                                                                                                   |
+| **Tailwind CSS v4**                       | Fast iteration; design tokens as CSS custom properties (poster-derived backdrop colors are runtime values)                                   |
+| **PWA (vite-plugin-pwa)**                 | Add-to-home-screen + icon + standalone display — the "feels like an app" layer, added late (M10), not a structural concern                   |
 
 ## Domain model (`core`)
 
 ```ts
 type DecisionItem = {
-  id: string;                       // provider-scoped, e.g. "tmdb:603"
+  id: string; // provider-scoped, e.g. "tmdb:603"
   title: string;
-  subtitle?: string;                // "2024 · 2h 46m"
+  subtitle?: string; // "2024 · 2h 46m"
   imageUrl?: string;
-  details: { kind: "movie" } & MovieDetails;   // discriminated union —
-};                                  // category #2 adds a variant, and the
-                                    // compiler flags every switch to update
+  details: { kind: "movie" } & MovieDetails; // discriminated union —
+}; // category #2 adds a variant, and the
+// compiler flags every switch to update
 
 type SessionStatus = "lobby" | "voting" | "runoff" | "reveal" | "resolved" | "abandoned";
 
-type SessionSnapshot = {            // the one type the UI renders from
-  room: Room;                       // status, round, config, hostId
-  participants: Participant[];      // includes per-person finished flag
+type SessionSnapshot = {
+  // the one type the UI renders from
+  room: Room; // status, round, config, hostId
+  participants: Participant[]; // includes per-person finished flag
   deck: DecisionItem[];
-  results: RoundResults | null;     // scores, unanimous ids — null until reveal
+  results: RoundResults | null; // scores, unanimous ids — null until reveal
 };
 ```
 
@@ -161,7 +162,7 @@ type SessionSnapshot = {            // the one type the UI renders from
 
 ```ts
 interface SessionService {
-  createRoom(config: RoomConfig): Promise<RoomHandle>;      // deck built server-side
+  createRoom(config: RoomConfig): Promise<RoomHandle>; // deck built server-side
   joinRoom(code: string, displayName: string): Promise<RoomHandle>;
   snapshots(room: RoomHandle): AsyncIterable<SessionSnapshot>;
   startVoting(): Promise<void>;
@@ -208,14 +209,14 @@ the five-minute budget gets measured, not assumed. Analytics SDKs: none.
 
 ## Testing strategy
 
-| Layer | How | What it protects |
-| --- | --- | --- |
-| `core` | Vitest, no mocks (pure functions) | Scoring, runoff rules, outbox retry/idempotency — the correctness core |
-| SQL | pgTAP-style tests against local Supabase (Docker) in CI | The authoritative state machine, RLS privacy rules |
-| Parity fixtures | One JSON suite asserted by *both* Vitest and the SQL tests | TS scoring ≡ SQL scoring, forever |
-| Edge Function | Deno tests with TMDb fixture JSON | Contract drift, domain mapping |
-| Components/hooks | Vitest + Testing Library against `FakeSessionService` | Flow logic: force-reveal gating, undo window, reconnection |
-| e2e | Playwright, fake backend, mobile viewport | The five-minute journey; multi-tab test = two participants in one spec |
+| Layer            | How                                                        | What it protects                                                       |
+| ---------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `core`           | Vitest, no mocks (pure functions)                          | Scoring, runoff rules, outbox retry/idempotency — the correctness core |
+| SQL              | pgTAP-style tests against local Supabase (Docker) in CI    | The authoritative state machine, RLS privacy rules                     |
+| Parity fixtures  | One JSON suite asserted by _both_ Vitest and the SQL tests | TS scoring ≡ SQL scoring, forever                                      |
+| Edge Function    | Deno tests with TMDb fixture JSON                          | Contract drift, domain mapping                                         |
+| Components/hooks | Vitest + Testing Library against `FakeSessionService`      | Flow logic: force-reveal gating, undo window, reconnection             |
+| e2e              | Playwright, fake backend, mobile viewport                  | The five-minute journey; multi-tab test = two participants in one spec |
 
 That last cell is a quiet superpower of the web pivot: **Playwright drives
 two browser contexts in one test** — host and guest, create/join/vote/reveal

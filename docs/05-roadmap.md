@@ -69,13 +69,13 @@ per-vote exit animations, vibration where supported. Deck is ~15 bundled
 fixture movies with local poster assets. Mobile-first layout.
 
 - **Done when:** swiping feels like casting, not submitting (subjective —
-  that's the point) *on a real phone via the deployed URL*; keyboard + screen
+  that's the point) _on a real phone via the deployed URL_; keyboard + screen
   reader operable; buttons fully replace gestures.
 - **PRs:** ① card + gestures, ② vote feedback/undo, ③ voting screen assembly.
 - **Learning:** gesture-driven animation, layoutId groundwork, touch vs
   pointer events.
 
-## M4 — Reveal ceremony, wheel, winner  🎯 *playtest gate*
+## M4 — Reveal ceremony, wheel, winner 🎯 _playtest gate_
 
 Leaderboard build-up, unanimous banner + confetti, the deterministic wheel
 (spin params + seed → identical animation anywhere), winner screen with
@@ -129,7 +129,7 @@ Supabase.
 
 `VoteOutbox` (localStorage-persisted, idempotent flush, backoff),
 `visibilitychange` fetch-then-stream recovery (the phone-locked-mid-vote
-case — *the* mobile-web failure mode), reload re-entry against the real
+case — _the_ mobile-web failure mode), reload re-entry against the real
 backend, leave/removal handling (including "leaver causes completion"),
 force-reveal flow, session timeout, Wake Lock during voting/reveal.
 
