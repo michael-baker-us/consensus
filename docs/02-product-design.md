@@ -38,7 +38,7 @@ that assumes a crowd.
 | --- | --- | --- |
 | 0:00 | Maya | New Room → Movies → picks streaming services, genres, deck size → room created with code, QR, share link |
 | 0:30 | Maya | Shares link to the group chat |
-| 0:45 | Jake | Taps link → (first time: App Store) → app opens on join screen, room pre-filled → types "Jake" → lands in lobby |
+| 0:45 | Jake | Taps link → browser opens straight into the room's join screen → types "Jake" → lands in lobby. No install, no account. |
 | 1:30 | Maya | Lobby shows 5 participants → Start |
 | 1:30–3:30 | All | Each swipes the ~15-card deck privately; waiting screen shows "3 of 5 finished" |
 | 3:30 | All | Everyone done (or Maya force-reveals) → reveal ceremony: leaderboard animates bottom-up, unanimous banner if earned, tie at the top → wheel spin |
@@ -69,7 +69,7 @@ that assumes a crowd.
 Consensus
 ├── Home
 │   ├── New Room  ──► Room Setup (wizard)
-│   ├── Join Room ──► Join (code entry / QR scan; deep links land here pre-filled)
+│   ├── Join Room ──► Join (code entry; /join/{code} URLs land here pre-filled)
 │   └── Recent sessions (local history, device-only)
 ├── Room Setup (host only)
 │   ├── Step 1: Category (Movies — sole option, but a real chooser screen)
@@ -86,14 +86,16 @@ Consensus
 
 ## Navigation map
 
-- **Root:** `NavigationStack` from Home; the Session is a single flow whose
-  screens are driven by shared session state (server is the source of truth),
-  not by manual push/pop — a participant whose app relaunches mid-session
-  re-enters at the correct screen.
-- **Deep links:** `consensus://join/{roomCode}` and universal link
-  `https://…/join/{roomCode}` open Join with the code pre-filled; QR codes
-  encode the universal link.
-- **No tab bar in MVP.** One job, one stack.
+- **Routes are entry points, not the session's navigation.** Three real
+  routes: `/` (Home), `/join/{roomCode}`, and `/room/{roomCode}`. Inside a
+  room, which screen renders (lobby / voting / waiting / reveal / winner) is
+  driven by shared session state — the server is the source of truth — never
+  by client-side navigation. A participant who reloads the page mid-session
+  lands back on the correct screen.
+- **Invite links are just URLs** (`/join/{roomCode}`); QR codes encode the
+  same URL, so any phone camera scans straight into the join screen — no
+  in-app scanner needed.
+- **No global nav chrome in MVP.** One job, one flow.
 
 ## Screen inventory (12)
 
@@ -103,7 +105,7 @@ Consensus
 | 2 | Category chooser | Movies only (visual placeholder for future categories) |
 | 3 | Filters | default · services empty-warning · loading provider list |
 | 4 | Review & Create | creating (network) · create failed |
-| 5 | Join | manual code · QR scanner · pre-filled from link · room not found · room already started |
+| 5 | Join | manual code · pre-filled from URL · room not found · room already started |
 | 6 | Name entry | first run only; remembered afterward |
 | 7 | Lobby | 1 participant · n participants · host vs guest view · room expired |
 | 8 | Voting | card stack · deck loading · image loading · last card |

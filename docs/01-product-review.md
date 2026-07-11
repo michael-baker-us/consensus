@@ -3,6 +3,16 @@
 Decisions and scope agreed on 2026-07-10. This document is the record of *why*;
 later phases build on it without re-litigating.
 
+> **Platform amendment (2026-07-10, same day, before any code):** Consensus
+> is a **web app**, not the iOS app of the original brief. Rationale: the #1
+> product risk identified below — the second user's install friction — is
+> *eliminated* by the web (link → voting in seconds, any phone), and the
+> project's stated goals are portfolio and shareability, both of which a live
+> URL serves better than a sideloaded build. The Supabase backend design is
+> client-agnostic and survives unchanged; a native SwiftUI client remains a
+> possible second act on the same backend. Decision #2 below (zero-signup
+> join) is strengthened by this change, not weakened.
+
 ## Locked decisions
 
 | # | Decision | Rationale |

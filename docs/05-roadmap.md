@@ -1,7 +1,7 @@
-# Consensus — Phase 5: Roadmap
+# Consensus — Phase 5: Roadmap (Web)
 
-Twelve milestones. Every one ends with a working, launchable app; every one
-is independently testable; each is 1–4 small PRs. Sized in PRs, not weeks —
+Twelve milestones. Every one ends with a working, deployed app; every one is
+independently testable; each is 1–4 small PRs. Sized in PRs, not weeks —
 this is a learning project and pace is yours.
 
 ## Ordering rationale (the honest tradeoff)
@@ -10,151 +10,168 @@ Risk-first sequencing says "build the backend first — it's the hardest
 part." This roadmap deliberately does the opposite: **the entire game loop
 runs on `FakeSessionService` before Supabase exists** (M0–M4), because
 Phase 1 established that game feel is the product bar. If the swipe-reveal
-loop isn't fun on one device with fake friends, the backend is wasted
-effort. The backend risk is contained rather than ignored: the
-`SessionService` protocol is fixed from M2, so the fake and the real
-implementation are interchangeable by construction, and the SQL layer gets
-its own isolated milestones (M6–M7) with real integration tests.
+loop isn't fun with fake friends, the backend is wasted effort. The backend
+risk is contained rather than ignored: the `SessionService` interface is
+fixed from M2, so fake and real implementations are interchangeable by
+construction, and the SQL layer gets its own isolated milestones (M6–M7)
+with real integration tests.
 
 **M4 is a hard gate: playtest before proceeding.** If the loop feels like a
 survey, iterate on M3–M4 until it doesn't.
 
+A web-specific bonus baked in from M0: **the app deploys to a public URL on
+every merge to main.** The portfolio artifact exists from day one and only
+gets better.
+
 ---
 
-## M0 — Skeleton and CI
+## M0 — Skeleton, CI, and a live URL
 
-Workspace, app target, the four empty local packages with their dependency
-rules declared, SwiftLint, GitHub Actions running build + tests on PR,
-README with a pointer to `docs/`.
+pnpm workspace (`app`, `packages/core`, `packages/backend`), Vite + React +
+TypeScript strict, ESLint + Prettier, Vitest wired, GitHub Actions (lint +
+test + build on PR), deploy-on-merge to GitHub Pages (SPA fallback
+configured), README pointing at `docs/`. A repo `CLAUDE.md` capturing the
+platform amendment and doc trail for future sessions.
 
-- **Done when:** app launches to a placeholder Home; CI is green and required.
-- **PRs:** ① workspace + packages, ② CI + lint.
-- **Learning:** SPM package boundaries, Xcode workspace layout, Actions for iOS.
+- **Done when:** a placeholder Home is live on a public URL; CI is green and
+  required.
+- **PRs:** ① workspace + app shell, ② CI + deploy pipeline.
+- **Learning:** monorepo boundaries, Vite, Pages deployment.
 
-## M1 — ConsensusCore: the rules of the game
+## M1 — `core`: the rules of the game
 
-Domain models (`DecisionItem`, `SessionSnapshot`, `Vote`, …), scoring engine,
+Domain types (`DecisionItem`, `SessionSnapshot`, `Vote`, …), scoring engine,
 unanimity detection, runoff rule (flat-score threshold, max 2 runoffs), and
-the **parity fixture suite** — JSON cases that will later also be asserted
-against SQL (M6).
+the **parity fixture suite** — JSON cases later asserted against SQL (M6).
 
-- **Done when:** package tests cover every scoring/runoff rule; fixtures
-  committed; app unchanged.
-- **PRs:** ① models, ② scoring + fixtures.
-- **Learning:** pure-domain design, table-driven tests, Swift 6 Sendable modeling.
+- **Done when:** Vitest covers every scoring/runoff rule; fixtures committed.
+- **PRs:** ① types, ② scoring + fixtures.
+- **Learning:** pure-domain design, discriminated unions, table-driven tests.
 
 ## M2 — Fake backend and the state-driven session shell
 
-`SessionService` protocol (frozen here — changing it later is a design
-review, not a refactor), `FakeSessionService` with scriptable snapshots and
-simulated participants, and `SessionFlowView` that renders lobby → voting →
-waiting → reveal → winner as placeholder screens driven purely by the
-snapshot stream. `-UseFakeBackend` launch argument.
+`SessionService` interface (frozen here — changing it later is a design
+review, not a refactor), `FakeSessionService` with scripted participants,
+and the `/room/:code` shell rendering lobby → voting → waiting → reveal →
+winner as placeholder screens driven purely by the snapshot stream.
+`/room/DEMO` activates the fake backend in any build, including production.
 
-- **Done when:** demo mode walks the full state machine end to end with
-  buttons; relaunch mid-"session" re-enters the correct placeholder screen.
-- **PRs:** ① protocol + fake, ② session shell + demo mode.
-- **Learning:** AsyncStream as an architecture seam, state-driven navigation.
+- **Done when:** demo mode walks the full state machine; a mid-"session"
+  page reload re-enters the correct placeholder screen.
+- **PRs:** ① interface + fake, ② session shell + demo route.
+- **Learning:** AsyncIterable as an architecture seam, state-driven rendering.
 
 ## M3 — The voting experience
 
-DesignSystem gets real: `PosterCard` with swipe physics, flip-for-details,
-vote buttons, single undo, progress dots, per-vote exit animations, haptics.
-Deck is ~15 bundled fixture movies with local poster assets.
+Design layer gets real: `PosterCard` with pointer-gesture swipe physics
+(Motion), flip-for-details, vote buttons, single undo, progress dots,
+per-vote exit animations, vibration where supported. Deck is ~15 bundled
+fixture movies with local poster assets. Mobile-first layout.
 
 - **Done when:** swiping feels like casting, not submitting (subjective —
-  that's the point); VoiceOver custom actions work; buttons fully replace
-  gestures.
-- **PRs:** ① card + gestures, ② vote feedback/undo/haptics, ③ voting screen
-  assembly.
-- **Learning:** gesture-driven animation, matchedGeometryEffect groundwork,
-  haptic design.
+  that's the point) *on a real phone via the deployed URL*; keyboard + screen
+  reader operable; buttons fully replace gestures.
+- **PRs:** ① card + gestures, ② vote feedback/undo, ③ voting screen assembly.
+- **Learning:** gesture-driven animation, layoutId groundwork, touch vs
+  pointer events.
 
 ## M4 — Reveal ceremony, wheel, winner  🎯 *playtest gate*
 
 Leaderboard build-up, unanimous banner + confetti, the deterministic wheel
 (spin params + seed → identical animation anywhere), winner screen with
-matched-geometry poster continuity. Reduce Motion variants for all of it.
+layoutId poster continuity. `prefers-reduced-motion` variants for all of it.
 
-- **Done when:** a full solo game — fake friends voting on a scripted delay —
-  is genuinely satisfying, and three real humans agree. **Do not pass this
-  gate on your own opinion.**
+- **Done when:** a full solo game at `/room/DEMO` — fake friends voting on
+  scripted delays — is genuinely satisfying, and three real humans (sent the
+  link, zero setup) agree. **Do not pass this gate on your own opinion.**
 - **PRs:** ① leaderboard, ② wheel, ③ winner + continuity.
 - **Learning:** choreographed animation sequences, deterministic simulation.
 
-## M5 — TMDb: real movies, real filters
+## M5 — TMDb via Edge Function: real movies, real filters
 
-`CandidateProviders`: endpoint layer, DTOs, domain mapping (fixture-tested),
-watch-providers, live match-count. Filters + Review & Create screens wired
-to it. Secrets via gitignored xcconfig. Rooms still fake.
+`deck-builder` Edge Function (TMDb key server-side, domain-shaped responses,
+Deno tests with fixture JSON), then Filters + Review & Create screens wired
+to it: service chips, live match count, deck build. Rooms still fake.
 
-- **Done when:** a deck built from real filters (services, genre, era) plays
-  through the M4 loop; mapping tests pin the TMDb contract.
-- **PRs:** ① client + DTOs + tests, ② filters UI, ③ review/create + deck wiring.
-- **Learning:** API client design, DTO/domain separation, secret management.
+- **Done when:** a deck built from real filters plays through the M4 loop;
+  no TMDb field name or key exists in client code.
+- **PRs:** ① Edge Function + tests, ② filters UI, ③ review/create wiring.
+- **Learning:** API proxy design, secret hygiene, edge runtimes.
 
 ## M6 — Supabase schema and the authoritative state machine
 
-SQL migrations: tables, the six RPC functions from docs/04, RLS policies
-(votes unreadable until reveal). Local Supabase via Docker; SQL tests
-including the **parity fixtures from M1 asserted against the SQL scoring**.
-CI job for the database. No app changes at all.
+SQL migrations: tables, the six RPCs from docs/04, RLS policies (votes
+unreadable until reveal). Local Supabase via Docker; SQL tests including the
+**parity fixtures from M1 asserted against SQL scoring**. CI job for the
+database. No app changes at all.
 
 - **Done when:** SQL tests prove the transition rules, the completion race,
-  host-only enforcement, and vote privacy; Swift ≡ SQL on every fixture.
+  host-only enforcement, and vote privacy; TS ≡ SQL on every fixture.
 - **PRs:** ① schema + RPCs, ② RLS + tests + CI.
 - **Learning:** transactional state machines, RLS, migrations — the
   distributed-systems core of the project.
 
-## M7 — SupabaseSessionService: real multiplayer
+## M7 — `SupabaseSessionService`: real multiplayer
 
-The real `SessionService`: anonymous auth, RPC calls, realtime
-subscriptions + presence + broadcast folded into the snapshot stream.
-Integration tests against local Supabase.
+The real implementation: anonymous auth, RPCs, realtime + presence +
+broadcast folded into the snapshot stream. Playwright integration spec with
+**two browser contexts** — host and guest in one test — against local
+Supabase.
 
-- **Done when:** two simulators create/join/vote/reveal a real room; the
-  wheel spin broadcast replays identically on both.
-- **PRs:** ① auth + RPCs, ② realtime fold, ③ integration tests.
-- **Learning:** realtime protocols, merging multiple event sources into one
-  stream, integration testing against containers.
+- **Done when:** two browser tabs create/join/vote/reveal a real room; the
+  wheel-spin broadcast replays identically in both; the two-context spec
+  runs in CI.
+- **PRs:** ① auth + RPCs, ② realtime fold, ③ two-context integration spec.
+- **Learning:** realtime protocols, merging event sources, multi-client
+  testing.
 
 ## M8 — Hardening: the unhappy paths
 
-`VoteOutbox` (persistent, idempotent flush, backoff), reconnection banner,
-relaunch re-entry against the real backend, leave/removal handling
-(including "leaver causes completion"), force-reveal flow, session timeout.
+`VoteOutbox` (localStorage-persisted, idempotent flush, backoff),
+`visibilitychange` fetch-then-stream recovery (the phone-locked-mid-vote
+case — *the* mobile-web failure mode), reload re-entry against the real
+backend, leave/removal handling (including "leaver causes completion"),
+force-reveal flow, session timeout, Wake Lock during voting/reveal.
 
-- **Done when:** airplane mode mid-vote loses nothing; killing the app
-  mid-session recovers; a stalled participant can't hang a room.
-- **PRs:** ① outbox, ② reconnect/re-entry, ③ host controls + timeouts.
-- **Learning:** offline-first reconciliation, idempotency, failure-mode design.
+- **Done when:** airplane mode mid-vote loses nothing; locking the phone for
+  a minute and returning recovers seamlessly; a stalled participant can't
+  hang a room.
+- **PRs:** ① outbox, ② visibility/reload recovery, ③ host controls + timeouts.
+- **Learning:** offline-first reconciliation, idempotency, mobile-browser
+  lifecycle.
 
-## M9 — Joining: links, QR, codes
+## M9 — Joining polish
 
-Universal links + custom scheme, QR generation (lobby) and scanning (join),
-the code-entry field, name entry, every join error state from docs/03.
+`/join/:code` with the code-entry field (pre-fill + auto-submit from URL),
+QR generation in the lobby (encoding the join URL — any phone camera scans
+straight in; there is no in-app scanner), Web Share API with copy-link
+fallback, name entry, every join error state from docs/03.
 
-- **Done when:** a phone with the app installed goes from tapped link to
-  lobby in under 10 seconds with no typing except a name.
-- **PRs:** ① deep links + code entry, ② QR both directions, ③ error states.
+- **Done when:** a phone goes from scanned QR to lobby in under 10 seconds
+  with no typing except a name.
+- **PRs:** ① join route + code entry, ② QR + share, ③ error states.
 
-## M10 — History, settings, attribution
+## M10 — History, settings, PWA
 
-SwiftData `SessionRecord` behind `HistoryStore`, Home recent list + winner
-recap, Settings (name edit, about, **TMDb/JustWatch attribution** — a terms
-requirement, not a nicety).
+`localStorage`-backed session history behind a `HistoryStore` interface,
+Home recent list + winner recap, Settings (name edit, about, **TMDb/JustWatch
+attribution** — a terms requirement, not a nicety), PWA manifest + icons
+(add-to-home-screen, standalone display).
 
-- **PRs:** ① history, ② settings.
+- **PRs:** ① history, ② settings + attribution, ③ PWA.
 
-## M11 — Release readiness
+## M11 — Portfolio readiness
 
-Accessibility audit (Dynamic Type, VoiceOver end-to-end, Reduce Motion),
-performance pass against the signposts (deck build, reveal latency), app
-icon, privacy manifest + nutrition labels, TestFlight, App Store metadata.
+Accessibility audit (keyboard end-to-end, screen reader pass, reduced
+motion, Lighthouse a11y), performance pass against the marks (deck build,
+reveal latency, bundle size), README overhaul: 30-second demo video above
+the fold, **the live URL and `/room/DEMO` link at the very top**, architecture
+sketch, "run it locally in five steps." Tagged v1.0.
 
-- **Done when:** a stranger's group of four picks a movie in under five
-  minutes via TestFlight — the Phase 1 promise, measured.
-- **PRs:** ① a11y, ② perf + manifest, ③ store assets.
+- **Done when:** a friends' group of four picks a movie in under five
+  minutes — the Phase 1 promise, measured — and a stranger with the README
+  gets from clone to local multiplayer in five minutes.
+- **PRs:** ① a11y, ② perf, ③ README + demo video + release tag.
 
 ---
 
@@ -162,7 +179,7 @@ icon, privacy manifest + nutrition labels, TestFlight, App Store metadata.
 
 ```text
 M0 → M1 → M2 → M3 → M4 ⛔(playtest gate)
-                         ├─→ M5 (TMDb)      ──┐
+                         ├─→ M5 (TMDb fn)   ──┐
                          └─→ M6 (SQL) → M7 ───┼→ M8 → M9 → M10 → M11
                                               ┘
 ```
