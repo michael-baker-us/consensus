@@ -1,0 +1,18 @@
+{
+  "name": "duplicate-vote-last-wins",
+  "description": "Re-voting the same item keeps only the latest choice (mirrors the server upsert / undo).",
+  "input": {
+    "deckItemIds": ["m1"],
+    "participantIds": ["a"],
+    "votes": [
+      { "participantId": "a", "itemId": "m1", "choice": "no" },
+      { "participantId": "a", "itemId": "m1", "choice": "favorite" }
+    ],
+    "runoffsPlayed": 0
+  },
+  "expected": {
+    "scores": [{ "itemId": "m1", "score": 2, "yesCount": 0, "favoriteCount": 1, "noCount": 0 }],
+    "unanimousItemIds": ["m1"],
+    "outcome": { "kind": "winner", "itemId": "m1" }
+  }
+}

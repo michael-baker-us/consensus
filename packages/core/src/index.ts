@@ -1,5 +1,8 @@
 // @consensus/core — pure domain logic. Zero runtime dependencies, by rule
-// (docs/04). Domain types, scoring, and the state machine arrive in M1.
+// (docs/04).
+
+export * from "./types.ts";
+export { SCORING, scoreRound, type ScoreRoundInput } from "./scoring.ts";
 
 /** Exhaustiveness guard for discriminated unions. */
 export function assertNever(value: never): never {

@@ -1,0 +1,26 @@
+{
+  "name": "clear-winner",
+  "description": "One item strictly ahead wins outright; yes+favorite from everyone makes it unanimous.",
+  "input": {
+    "deckItemIds": ["m1", "m2", "m3"],
+    "participantIds": ["alice", "bob"],
+    "votes": [
+      { "participantId": "alice", "itemId": "m1", "choice": "yes" },
+      { "participantId": "alice", "itemId": "m2", "choice": "no" },
+      { "participantId": "alice", "itemId": "m3", "choice": "yes" },
+      { "participantId": "bob", "itemId": "m1", "choice": "favorite" },
+      { "participantId": "bob", "itemId": "m2", "choice": "no" },
+      { "participantId": "bob", "itemId": "m3", "choice": "no" }
+    ],
+    "runoffsPlayed": 0
+  },
+  "expected": {
+    "scores": [
+      { "itemId": "m1", "score": 3, "yesCount": 1, "favoriteCount": 1, "noCount": 0 },
+      { "itemId": "m3", "score": 1, "yesCount": 1, "favoriteCount": 0, "noCount": 1 },
+      { "itemId": "m2", "score": 0, "yesCount": 0, "favoriteCount": 0, "noCount": 2 }
+    ],
+    "unanimousItemIds": ["m1"],
+    "outcome": { "kind": "winner", "itemId": "m1" }
+  }
+}

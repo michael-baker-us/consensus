@@ -1,0 +1,31 @@
+{
+  "name": "flat-scores-trigger-runoff",
+  "description": "More leaders than the wheel holds (6 > 5) triggers a runoff on the top 5 by rank.",
+  "input": {
+    "deckItemIds": ["m1", "m2", "m3", "m4", "m5", "m6", "m7"],
+    "participantIds": ["a"],
+    "votes": [
+      { "participantId": "a", "itemId": "m1", "choice": "yes" },
+      { "participantId": "a", "itemId": "m2", "choice": "yes" },
+      { "participantId": "a", "itemId": "m3", "choice": "yes" },
+      { "participantId": "a", "itemId": "m4", "choice": "yes" },
+      { "participantId": "a", "itemId": "m5", "choice": "yes" },
+      { "participantId": "a", "itemId": "m6", "choice": "yes" },
+      { "participantId": "a", "itemId": "m7", "choice": "no" }
+    ],
+    "runoffsPlayed": 0
+  },
+  "expected": {
+    "scores": [
+      { "itemId": "m1", "score": 1, "yesCount": 1, "favoriteCount": 0, "noCount": 0 },
+      { "itemId": "m2", "score": 1, "yesCount": 1, "favoriteCount": 0, "noCount": 0 },
+      { "itemId": "m3", "score": 1, "yesCount": 1, "favoriteCount": 0, "noCount": 0 },
+      { "itemId": "m4", "score": 1, "yesCount": 1, "favoriteCount": 0, "noCount": 0 },
+      { "itemId": "m5", "score": 1, "yesCount": 1, "favoriteCount": 0, "noCount": 0 },
+      { "itemId": "m6", "score": 1, "yesCount": 1, "favoriteCount": 0, "noCount": 0 },
+      { "itemId": "m7", "score": 0, "yesCount": 0, "favoriteCount": 0, "noCount": 1 }
+    ],
+    "unanimousItemIds": ["m1", "m2", "m3", "m4", "m5", "m6"],
+    "outcome": { "kind": "runoff", "itemIds": ["m1", "m2", "m3", "m4", "m5"] }
+  }
+}

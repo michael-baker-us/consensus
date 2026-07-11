@@ -1,0 +1,26 @@
+{
+  "name": "tie-goes-to-wheel",
+  "description": "Two items tied at the top go to the wheel; ranking breaks the tie by deck order.",
+  "input": {
+    "deckItemIds": ["m1", "m2", "m3"],
+    "participantIds": ["a", "b"],
+    "votes": [
+      { "participantId": "a", "itemId": "m1", "choice": "yes" },
+      { "participantId": "a", "itemId": "m2", "choice": "yes" },
+      { "participantId": "a", "itemId": "m3", "choice": "no" },
+      { "participantId": "b", "itemId": "m1", "choice": "yes" },
+      { "participantId": "b", "itemId": "m2", "choice": "yes" },
+      { "participantId": "b", "itemId": "m3", "choice": "no" }
+    ],
+    "runoffsPlayed": 0
+  },
+  "expected": {
+    "scores": [
+      { "itemId": "m1", "score": 2, "yesCount": 2, "favoriteCount": 0, "noCount": 0 },
+      { "itemId": "m2", "score": 2, "yesCount": 2, "favoriteCount": 0, "noCount": 0 },
+      { "itemId": "m3", "score": 0, "yesCount": 0, "favoriteCount": 0, "noCount": 2 }
+    ],
+    "unanimousItemIds": ["m1", "m2"],
+    "outcome": { "kind": "tie", "itemIds": ["m1", "m2"] }
+  }
+}

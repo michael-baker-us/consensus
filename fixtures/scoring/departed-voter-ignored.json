@@ -1,0 +1,22 @@
+{
+  "name": "departed-voter-ignored",
+  "description": "Votes from a participant no longer in the room are excluded from scores and unanimity.",
+  "input": {
+    "deckItemIds": ["m1", "m2"],
+    "participantIds": ["a"],
+    "votes": [
+      { "participantId": "b", "itemId": "m1", "choice": "favorite" },
+      { "participantId": "a", "itemId": "m1", "choice": "no" },
+      { "participantId": "a", "itemId": "m2", "choice": "yes" }
+    ],
+    "runoffsPlayed": 0
+  },
+  "expected": {
+    "scores": [
+      { "itemId": "m2", "score": 1, "yesCount": 1, "favoriteCount": 0, "noCount": 0 },
+      { "itemId": "m1", "score": 0, "yesCount": 0, "favoriteCount": 0, "noCount": 1 }
+    ],
+    "unanimousItemIds": ["m2"],
+    "outcome": { "kind": "winner", "itemId": "m2" }
+  }
+}

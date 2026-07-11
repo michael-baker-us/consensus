@@ -1,0 +1,24 @@
+{
+  "name": "unanimity-requires-every-vote",
+  "description": "A missing vote (force-reveal, leaver) scores 0 and breaks unanimity even when scores tie.",
+  "input": {
+    "deckItemIds": ["m1", "m2"],
+    "participantIds": ["a", "b", "c"],
+    "votes": [
+      { "participantId": "a", "itemId": "m1", "choice": "yes" },
+      { "participantId": "b", "itemId": "m1", "choice": "favorite" },
+      { "participantId": "a", "itemId": "m2", "choice": "yes" },
+      { "participantId": "b", "itemId": "m2", "choice": "yes" },
+      { "participantId": "c", "itemId": "m2", "choice": "yes" }
+    ],
+    "runoffsPlayed": 0
+  },
+  "expected": {
+    "scores": [
+      { "itemId": "m1", "score": 3, "yesCount": 1, "favoriteCount": 1, "noCount": 0 },
+      { "itemId": "m2", "score": 3, "yesCount": 3, "favoriteCount": 0, "noCount": 0 }
+    ],
+    "unanimousItemIds": ["m2"],
+    "outcome": { "kind": "tie", "itemIds": ["m1", "m2"] }
+  }
+}

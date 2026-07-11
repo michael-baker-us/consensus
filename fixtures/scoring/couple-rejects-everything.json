@@ -1,0 +1,26 @@
+{
+  "name": "couple-rejects-everything",
+  "description": "n=2 (the most common group) voting no on everything: all items tie at 0 and the wheel decides.",
+  "input": {
+    "deckItemIds": ["m1", "m2", "m3"],
+    "participantIds": ["sam", "priya"],
+    "votes": [
+      { "participantId": "sam", "itemId": "m1", "choice": "no" },
+      { "participantId": "sam", "itemId": "m2", "choice": "no" },
+      { "participantId": "sam", "itemId": "m3", "choice": "no" },
+      { "participantId": "priya", "itemId": "m1", "choice": "no" },
+      { "participantId": "priya", "itemId": "m2", "choice": "no" },
+      { "participantId": "priya", "itemId": "m3", "choice": "no" }
+    ],
+    "runoffsPlayed": 0
+  },
+  "expected": {
+    "scores": [
+      { "itemId": "m1", "score": 0, "yesCount": 0, "favoriteCount": 0, "noCount": 2 },
+      { "itemId": "m2", "score": 0, "yesCount": 0, "favoriteCount": 0, "noCount": 2 },
+      { "itemId": "m3", "score": 0, "yesCount": 0, "favoriteCount": 0, "noCount": 2 }
+    ],
+    "unanimousItemIds": [],
+    "outcome": { "kind": "tie", "itemIds": ["m1", "m2", "m3"] }
+  }
+}
