@@ -5,6 +5,7 @@ Builds on the decisions in [01-product-review.md](01-product-review.md).
 ## Personas
 
 ### 1. Maya — the Organizer (host)
+
 29, plans movie night for a friend group of five. Motivated enough to spend
 60 seconds on setup (services, genres) because she's the one who suffers most
 from the group chat's "idk, whatever you want." Owns the room: invites,
@@ -13,6 +14,7 @@ start, force-reveal, remove-stalled-participant.
 **Designs for her:** the setup wizard, host controls, session progress visibility.
 
 ### 2. Jake — the Reluctant Guest
+
 31, in the group chat, will not create an account for anything, has never
 heard of this app. He taps a link mid-conversation. If he isn't voting within
 60 seconds of tapping (install time excluded), we've lost him — and losing one
@@ -22,6 +24,7 @@ guest kills the session for everyone.
 UI that needs no explanation.
 
 ### 3. Sam & Priya — the Couple
+
 Deciding date-night movie. Group of two — likely the *most common* real-world
 session size. Keeps the design honest: consensus math, reveal drama, and the
 wheel must all work when n = 2, not just for parties.
@@ -43,7 +46,7 @@ that assumes a crowd.
 
 ## Session state machine
 
-```
+```text
           host creates            host starts           all done /
              room                   voting             force-reveal
   (none) ──────────► LOBBY ──────────► VOTING ──────────► REVEAL
@@ -62,7 +65,7 @@ that assumes a crowd.
 
 ## Information architecture
 
-```
+```text
 Consensus
 ├── Home
 │   ├── New Room  ──► Room Setup (wizard)
